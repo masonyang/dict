@@ -2,6 +2,8 @@
 # -*- coding: utf-8 -*-
 
 """
+    /Library/Python/2.7/site-packages/dict
+
     dict
     ~~~~
 
@@ -17,11 +19,12 @@ from __future__ import unicode_literals
 import sys
 import json
 import re
+import translate
 
 __name__ = 'dict-cli'
 __version__ = '1.3.4'
-__description__ = '命令行下中英文翻译工具（Chinese and English translation tools in the command line）'
-__keywords__ = 'Translation English2Chinese Chinese2English Command-line'
+__description__ = '命令行下中日英文翻译工具（Chinese and English translation tools in the command line）'
+__keywords__ = 'Translation English2Chinese Chinese2Japanese Japanese2Chinese Command-line'
 __author__ = 'Feei'
 __contact__ = 'feei@feei.cn'
 __url__ = 'https://github.com/wufeifei/dict'
@@ -138,9 +141,64 @@ class Dict:
         elif code == 60:  # Don't have this word
             print('DO\'T HAVE THIS WORD')
 
+class BdDict(object):
+    
+
+    content = None
+
+    origin = None
+
+    """docstring for BdDict"""
+    def __init__(self, argv):
+        message = ''
+        if len(argv) > 0:
+            for s in argv:
+                message = message + s + ' '
+            self.translate(message.encode('utf-8'))
+        else:
+            print('Usage: dict test')
+    
+    def translate(self,message):
+        trans = translate.Translate()
+
+        sentence = message.strip()
+
+        self.origin = sentence
+
+        if(sentence == ''):
+            self.content = 'None'
+        else:
+            f = trans.langdetect(sentence)
+
+            self.content = trans.trans(sentence,f)
+
+        self.parse()
+
+    def parse(self):
+        print('\033[1;31m################################### \033[0m')
+
+        trg_str = ''
+        src_str = ''
+        try:
+            for item in self.content['phonetic']:
+                for i in item:
+                    if(i=='trg_str'):
+                        trg_str = trg_str + item['trg_str']+' '
+                    if(i=='src_str'):
+                        src_str = src_str + item['src_str']+' '
+        except KeyError:
+            trg_str = '-'
+            src_str = '-'
+
+        print('\033[1;31m# \033[0m {0} (phonetic: {1})'.format(
+            self.content['data'][0]['src'],src_str))
+        print('\033[1;31m# \033[0m')
+        print('\033[1;31m# \033[0m')
+        print('\033[1;31m# \033[0m {0} (phonetic: {1})'.format(self.content['data'][0]['dst'],trg_str))
+        print('\033[1;31m################################### \033[0m')
 
 def main():
-    Dict(sys.argv[1:])
+    BdDict(sys.argv[1:])
 
 
 if __name__ == '__main__':
