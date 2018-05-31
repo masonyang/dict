@@ -2,7 +2,7 @@
 
 命令行下中日英文翻译工具（Chinese and English and Japanese translation tools in the command line）
 
-PS: 在基础上增加了日语翻译，并将有道翻译替换成了百度翻译【仅供学习】https://github.com/FeeiCN/dict(wufeifei)
+PS: 在FeeiCN/dict基础上增加了日语翻译，并将有道翻译替换成了百度翻译【仅供学习】https://github.com/FeeiCN/dict(wufeifei)
 
 
 ## 安装(Install)
